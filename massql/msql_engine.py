@@ -369,7 +369,7 @@ def _executeconditions_query(parsed_dict, input_filename, ms1_input_df=None, ms2
     # This function attempts to find the data that the query specifies in the conditions
     
     import json
-    print("parsed_dict", json.dumps(parsed_dict, indent=4))
+    #print("parsed_dict", json.dumps(parsed_dict, indent=4))
 
     # Let's apply this to real data
     if ms1_input_df is None and ms2_input_df is None:
@@ -578,7 +578,7 @@ def _executecollate_query(parsed_dict, ms1_df, ms2_df):
                 ms2sum_df = ms2_df.groupby("scan").sum().reset_index()
                 
                 ms2_df = ms2_df.groupby("scan").first().reset_index()
-                ms2_df["i"] = ms2sum_df["i"]
+                ms2_df["frag_intens"] = ms2sum_df["frag_intens"]
 
                 return ms2_df
 
@@ -609,7 +609,8 @@ def _executecollate_query(parsed_dict, ms1_df, ms2_df):
                     return pd.DataFrame()
 
                 groupby_columns = ["scan"]
-                kept_columns = ["scan", "rt"]
+                #kept_columns = ["scan", "rt"] ### Here I changed something
+                kept_columns = ["scan"]
 
                 if "comment" in ms1_df:
                     groupby_columns.append("comment")
@@ -630,7 +631,7 @@ def _executecollate_query(parsed_dict, ms1_df, ms2_df):
                 if len(ms2_df) == 0:
                     return pd.DataFrame()
 
-                kept_columns = ["scan", "precmz", "ms1scan", "rt", "charge"]
+                kept_columns = ["motifset", "motif_id", "short_annotation", "ms1scan", "charge"] #### Here I changed something
                 groupby_columns = ["scan"]
 
                 if "comment" in ms2_df:
@@ -646,8 +647,8 @@ def _executecollate_query(parsed_dict, ms1_df, ms2_df):
                 ms2sum_df = ms2_df.groupby(groupby_columns).sum().reset_index()
                 ms2norm_df = ms2_df.groupby(groupby_columns).max().reset_index()
 
-                result_df["i"] = ms2sum_df["i"]
-                result_df["i_norm"] = ms2norm_df["i_norm"]
+                result_df["i"] = ms2sum_df["frag_intens"]
+                #result_df["i_norm"] = ms2norm_df["i_norm"]
                 result_df["mslevel"] = 2
 
                 # Calculating the MS1 i_norm and then joining on the ms1scan
@@ -686,7 +687,7 @@ def _executecollate_query(parsed_dict, ms1_df, ms2_df):
 
                 ms2sum_df = ms2_df.groupby("scan").sum()
                 ms2_df = ms2_df.groupby("scan").first().reset_index()
-                ms2_df["i"] = ms2sum_df["i"]
+                ms2_df["frag_intens"] = ms2sum_df["frag_intens"]
 
                 return ms2_df
 
@@ -710,7 +711,7 @@ def _executecollate_query(parsed_dict, ms1_df, ms2_df):
                 ms2sum_df = ms2_df.groupby("scan").max().reset_index()
                 
                 ms2_df = ms2_df.groupby("scan").first().reset_index()
-                ms2_df["i"] = ms2sum_df["i"]
+                ms2_df["frag_intens"] = ms2sum_df["frag_intens"]
 
                 return ms2_df
 
