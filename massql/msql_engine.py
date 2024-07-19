@@ -207,9 +207,9 @@ def _evalute_variable_query(parsed_dict, input_filename,
 
                 non_variable_conditions.append(condition)
 
-        presearch_parse["conditions"] = non_variable_conditions
+        presearch_parse["conditions"] = non_variable_conditions ### HERE comes the error with X from
 
-        ms1_df, ms2_df = _executeconditions_query(presearch_parse, input_filename, 
+        ms1_df, ms2_df = _executeconditions_query(presearch_parse, input_filename, ms1_input_df=ms1_df, ms2_input_df=ms2_df,
                                                 cache=cache, cache_dir=cache_dir, cache_file=cache_file)
         variable_x_ms1_df = ms1_df
 
@@ -235,23 +235,25 @@ def _evalute_variable_query(parsed_dict, input_filename,
         # Here we will start with the smallest mass and then go up
         masses_considered_df_list = []
         if variable_properties["query_ms1"]:
-            masses_considered_df_list.append(variable_x_ms1_df["mz"])
+            masses_considered_df_list.append(variable_x_ms1_df["mz"]) # this is ms1 query... not possible with motifs
         if variable_properties["query_ms2"]:
-            masses_considered_df_list.append(ms2_df["mz"])
+            masses_considered_df_list.append(ms2_df["frag_mz"]) # HERE I changed the name
         if variable_properties["query_ms2prec"]:
             masses_considered_df_list.append(ms2_df["precmz"])
 
         masses_considered_df = pd.DataFrame()
-        masses_considered_df["mz"] = pd.concat(masses_considered_df_list)
+        masses_considered_df["frag_mz"] = pd.concat(masses_considered_df_list)
         # NOTE: This might cause bugs, we might consider every mass within every single scan, or at least we could make the tolernace as even smaller than half the max
-        masses_considered_df["mz_max"] = masses_considered_df["mz"].apply(lambda x: _determine_mz_max(x, variable_properties["ppm_tolerance"], variable_properties["da_tolerance"]))
+        masses_considered_df["mz_max"] = masses_considered_df["frag_mz"].apply(lambda x: _determine_mz_max(x, variable_properties["ppm_tolerance"], variable_properties["da_tolerance"]))
         
-        masses_considered_df = masses_considered_df.sort_values("mz")
+        masses_considered_df = masses_considered_df.sort_values("frag_mz")
         masses_list = masses_considered_df.to_dict(orient="records")
 
         running_max_mz = 0
         for masses_obj in tqdm(masses_list):
-            mz_val = masses_obj["mz"]
+            mz_val = masses_obj["frag_mz"]
+            if np.isnan(mz_val):
+                continue
 
             if running_max_mz > mz_val:
                 continue
@@ -531,11 +533,10 @@ def _executeconditions_query(parsed_dict, input_filename, ms1_input_df=None, ms2
 
             min_int, min_intpercent, min_tic_percent_intensity = _get_minintensity(condition.get("qualifiers", None))
 
-            ms2_df = ms2_df[(ms2_df["mz"] > mz_min) & 
-                            (ms2_df["mz"] < mz_max) & 
-                            (ms2_df["i"] > min_int) & 
-                            (ms2_df["i_norm"] > min_intpercent) & 
-                            (ms2_df["i_tic_norm"] > min_tic_percent_intensity)]
+            ms2_df = ms2_df[(ms2_df["frag_mz"] > mz_min) & 
+                            (ms2_df["frag_mz"] < mz_max) & 
+                            (ms2_df["frag_intens"] > min_int)
+                            ]
 
     if "comment" in parsed_dict:
         ms1_df["comment"] = parsed_dict["comment"]
@@ -667,7 +668,7 @@ def _executecollate_query(parsed_dict, ms1_df, ms2_df):
             result_list = []
 
             if parsed_dict["querytype"]["datatype"] == "datams1data":
-                ms1_df["bin"] = ms1_df["mz"].apply(lambda x: int(x / 0.1))
+                ms1_df["bin"] = ms1_df["frag_mz"].apply(lambda x: int(x / 0.1))
                 all_bins = set(ms1_df["bin"])
 
                 for bin in all_bins:
