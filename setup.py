@@ -5,14 +5,14 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="massql",
+    name="massql4motifs",
     version="0.0.15",
-    author="Mingxun Wang",
-    author_email="mwang87@gmail.com",
-    description="Mass spectrometry query language python implementation",
+    author="Jonas Dietrich",
+    author_email="jonas.dietrich@wur.nl",
+    description="Fork of Mass spectrometry query language python implementation to work with MS2LDA motifs",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/mwang87/MassQueryLanguage",
+    url="https://github.com/j-a-dietrich/MassQueryLanguage4Mass2Motifs",
     project_urls={
         "Bug Tracker": "https://github.com/mwang87/MassQueryLanguage/issues",
         "Documentation": "https://mwang87.github.io/MassQueryLanguage_Documentation/"

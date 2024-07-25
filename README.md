@@ -13,7 +13,7 @@ Mass2Motifs are purely ms2 based spectral patterns and therefore ms1 level queri
 
 ## Installation
 
-This package is not available in pypi, but can be installed using pip. The original massql should not be installed in your environement.
+This package is not available in pypi, but can be installed using pip.
 
 ```git clone https://github.com/j-a-dietrich/MassQueryLanguage4Mass2Motifs.git```
 ```cd MassQueryLanguage4Mass2Motifs```
