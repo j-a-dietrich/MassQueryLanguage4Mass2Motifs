@@ -42,7 +42,7 @@ def _get_da_tolerance(qualifiers):
     return None
 
 
-def process_query(input_query, input_filename, path_to_grammar=None, 
+def process_query(input_query, input_filename=None, path_to_grammar=None, 
                     cache=None, cache_dir=None, cache_file=None,
                     parallel=False, ms1_df=None, ms2_df=None):
     """
