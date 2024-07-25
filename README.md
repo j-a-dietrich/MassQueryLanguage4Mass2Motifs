@@ -13,17 +13,23 @@ Mass2Motifs are purely ms2 based spectral patterns and therefore ms1 level queri
 
 ## Installation
 
-This package is not available in pypi, but can be installed using pip.
+This package is not available in pypi, but can be installed using pip. The original massql should not be installed in your environement.
 
-```git clone https://github.com/j-a-dietrich/MassQueryLanguage4Mass2Motifs.git```
-```cd MassQueryLanguage4Mass2Motifs```
-```pip install .```
+```Python
+git clone https://github.com/j-a-dietrich/MassQueryLanguage4Mass2Motifs.git
+cd MassQueryLanguage4Mass2Motifs
+pip install .
+```
+
+It will say that massql4motifs is installed, but you have to import *massql* and not *massq4motifs*.
 
 ## Usage
 This package should only be used with MotifDB. MotifDB can either be downloaded (not yet) from Zenodo or created with MS2LDA.
+<br>
+For an example use case go to the folder tutorial4motifs.
 
 
-# Original Mass Spec Query Readme
+# Original Mass Spec Query README
 ## Mass Spec Query Language
 
 The Mass Spec Query Language (MassQL) is a domain specific language meant to be a succinct way to
