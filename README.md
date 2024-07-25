@@ -1,7 +1,30 @@
-# Mass Spec Query Language
+# Mass Spec Query Language for Mass2Motifs
+**This is a fork of [Mingxun Wang's Mass Spec Query Language repository](https://github.com/mwang87/MassQueryLanguage)!** <br>
+This fork is needed to query the MotifDB of [MS2LDA](https://github.com/vdhooftcompmet/MS2LDA). Since a motif is a spectral pattern and not a spectrum that is used in the original massql, there are a few adjustments made to the source code to be compatible with motif querying. <br>
+**Massql4Mass2Motifs cannot be used for spectra!** <br>
+**Massql cannot be used for motifs!** <br>
+The major changes that have been made to the source code:
+- losses are not calculated in-time anymore (you cannot calculate a loss of a motif since it does not have a precusor)
+- losses are also stored in the massql dataframe format. Losses show NaN values for fragment mz and intensities and the other way around
+- additional field for annotation and further information was included in the ms2 dataframe and they will also show up in the results table
+- overlap of scans (is used as an identifier) is avoided using a hash function for the combination of folder name + motif id (you can stack many motif sets together, without the need of correcting scan numbers)
+<br>
+Mass2Motifs are purely ms2 based spectral patterns and therefore ms1 level queries will result in error messages. The source code will still return ms1 dataframe and they are needed to query motifDB, even though their content is not important. It would be too much of an effort to change the entire source code for this.
 
-[![Unit Testing](https://github.com/mwang87/MassQueryLanguage/actions/workflows/test-unit.yml/badge.svg)](https://github.com/mwang87/MassQueryLanguage/actions/workflows/test-unit.yml)
-[![NF Workflow Testing](https://github.com/mwang87/MassQueryLanguage/actions/workflows/test-workflow.yml/badge.svg)](https://github.com/mwang87/MassQueryLanguage/actions/workflows/test-workflow.yml)
+## Installation
+
+This package is not available in pypi, but can be installed using pip. The original massql should not be installed in your environement.
+
+```git clone https://github.com/j-a-dietrich/MassQueryLanguage4Mass2Motifs.git```
+```cd MassQueryLanguage4Mass2Motifs```
+```pip install .```
+
+## Usage
+This package should only be used with MotifDB. MotifDB can either be downloaded (not yet) from Zenodo or created with MS2LDA.
+
+
+# Original Mass Spec Query Readme
+## Mass Spec Query Language
 
 The Mass Spec Query Language (MassQL) is a domain specific language meant to be a succinct way to
 express a query in a mass spectrometry centric fashion. It is inspired by SQL,
@@ -13,8 +36,7 @@ natural for mass spectrometry users. Broadly we attempt to design it according t
 2. Scalable - Easily facilitating the querying of one spectrum all the way up to entire repositories of data
 3. Relatively Natural - MassQL should be relatively easy to read and write and even use to communicate ideas about mass
    spectrometry, you know like a language.
-
-## Repository Structure
+### Repository Structure
 
 This is the repository to define the language and reference implementation. This contains several parts
 
@@ -25,87 +47,14 @@ This is the repository to define the language and reference implementation. This
 1. ProteoSAFe workflow
 1. Dash interactive exploration
 
-## Developers/Contact
+### Developers/Contact
 
 Mingxun Wang is the main creator and developer of MassQL. Contact me for contributing or using it!
 
-## Language Specification/Documentation
+### Language Specification/Documentation
 
 Checkout specifics for the language, examples, and design patterns at the documentation.
 
 [Documentation Link](https://mwang87.github.io/MassQueryLanguage_Documentation/)
 
-## Python API
 
-To install massql
-
-```
-pip install massql
-```
-
-Here is the most basic operation you can do
-
-```
-from massql import msql_engine
-
-results_df = msql_engine.process_query(input_query, input_filename)
-```
-
-If you want to push in a data frame you already have, you can specify it
-
-```
-from massql import msql_engine
-from massql import msql_fileloading
-
-# Loading Data
-ms1_df, ms2_df = msql_fileloading.load_data(input_filename)
-
-# Executing Query
-results_df = msql_engine.process_query(input_query, input_filename, ms1_df=ms1_df, ms2_df=ms2_df)
-```
-
-## Command Line Tool
-
-You can use the command line tool ```massql``` to query things or put things into a pipeline.
-
-A few examples of what you can do
-
-```
-massql test.mzML "QUERY scaninfo(MS2DATA)" --output_file results.tsv
-```
-
-## Web API
-
-### API Version
-
-```/api```
-
-### Parsing query into intermediate JSON string
-
-```/parse?query=<query string>```
-
-[Example Link](https://msql.ucsd.edu/parse?query=QUERY%20MS2DATA%20WHERE%20MS1MZ=100)
-
-### Visualization of Query
-
-Visualization image of MS1 spectra
-
-```/visualize/ms1```
-
-[Example Link](https://msql.ucsd.edu/visualize/ms1?query=QUERY+scaninfo%28MS1DATA%29+WHERE+MS1MZ%3DX%3ATOLERANCEMZ%3D0.1%3AINTENSITYPERCENT%3D25%3AINTENSITYMATCH%3DY%3AINTENSITYMATCHREFERENCE+AND+%0AMS1MZ%3DX%2B2%3ATOLERANCEMZ%3D0.1%3AINTENSITYMATCH%3DY%2A0.66%3AINTENSITYMATCHPERCENT%3D30+AND+%0AMS1MZ%3DX-2%3ATOLERANCEMZ%3D0.1%3AINTENSITYMATCH%3DY%2A0.66%3AINTENSITYMATCHPERCENT%3D30+AND+MS1MZ%3DX%2B4%3ATOLERANCEMZ%3D0.2%3AINTENSITYMATCH%3DY%2A0.17%3AINTENSITYMATCHPERCENT%3D40+AND+%0AMS1MZ%3DX-4%3ATOLERANCEMZ%3D0.2%3AINTENSITYMATCH%3DY%2A0.17%3AINTENSITYMATCHPERCENT%3D40+AND+%0AMS2PREC%3DX&filename=GNPS00002_A3_p.mzML&x_axis=&y_axis=&facet_column=&scan=&x_value=572.828&y_value=0.64&ms1_usi=mzspec%3AGNPS%3ATASK-f6e8346934904399ae6742723762b2cb-f.MSV000084691%2Fccms_peak%2F1810E-II.mzML%3Ascan%3A474&ms2_usi=)
-
-Visualization image of MS2 spectra
-
-```/visualize/ms2```
-
-## Testing
-
-To run tests, you'll need to first fetch some fixtures that are not bundled with the git repo:
-```cd tests && sh ./get_data.sh```
-
-You will also want to install the extra requirements for the test suite:
-```pip install -r requirements_test.txt```
-
-## License
-
-MIT License
