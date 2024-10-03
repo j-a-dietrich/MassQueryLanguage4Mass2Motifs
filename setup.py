@@ -9,12 +9,12 @@ setuptools.setup(
     version="0.0.15",
     author= {
         "Jonas Dietrich",
-        "Rosina Torres Ortega"
-    }
+        "Rosina Torres Ortega",
+    },
     author_email= {
         "jonas.dietrich@wur.nl",
-        "rosina.torresortega@wur.nl"
-    }
+        "rosina.torresortega@wur.nl",
+    },
     description="Fork of Mass spectrometry query language python implementation to work with MS2LDA motifs",
     long_description=long_description,
     long_description_content_type="text/markdown",
