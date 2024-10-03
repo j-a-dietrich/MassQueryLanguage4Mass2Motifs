@@ -60,12 +60,34 @@ def process_query(input_query, input_filename=None, path_to_grammar=None,
     Returns:
         query results data frame: [description]
     """
-
+    input_query, ms2_df = pre_parsing(input_query, ms2_df)
     parsed_dict = msql_parser.parse_msql(input_query, path_to_grammar=path_to_grammar)
 
     return _evalute_variable_query(parsed_dict, input_filename, 
                                     cache=cache, cache_dir=cache_dir, cache_file=cache_file,
                                     parallel=parallel, ms1_df=ms1_df, ms2_df=ms2_df)
+
+def pre_parsing(input_query, ms2_df):
+    """incooperates dataframe filtering steps applied by the user; implemented by Jonas
+    
+    ARGS:
+        input_query (str): massql query with
+        ms2_df (df): dataframe
+        
+    RETURNS:
+        modified_input_query (str): massql input query without extra filtering arguments
+        ms2_df_filtered (df): filtered dataframe based on input query
+    """
+
+    if ";" in input_query:
+        modified_input_query, df_filter = input_query.split(";")
+        if ":" in df_filter:
+            df_column, value = df_filter.split(":")
+            ms2_df_filtered = ms2_df.loc[ms2_df[df_column] == value]
+            return modified_input_query, ms2_df_filtered
+
+    else:
+        return input_query, ms2_df
 
 def _determine_mz_max(mz, ppm_tol, da_tol):
     da_tol = da_tol if da_tol < 10000 else 0
