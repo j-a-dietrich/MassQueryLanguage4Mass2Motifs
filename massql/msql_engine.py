@@ -4,6 +4,7 @@ import numpy as np
 import copy
 import logging
 from tqdm import tqdm
+import re # Change here
 
 from py_expression_eval import Parser
 
@@ -79,15 +80,28 @@ def pre_parsing(input_query, ms2_df):
         ms2_df_filtered (df): filtered dataframe based on input query
     """
 
-    if ";" in input_query:
-        modified_input_query, df_filter = input_query.split(";")
-        if ":" in df_filter:
-            df_column, value = df_filter.split(":")
-            ms2_df_filtered = ms2_df.loc[ms2_df[df_column] == value]
-            return modified_input_query, ms2_df_filtered
+    def extract_metafilters(query):
+        metafilter_pattern = r"METAFILTER:([\w_]+)=(.*?)(?=\s+METAFILTER:|$)"
+        metafilters = re.findall(metafilter_pattern, query)
+        metafilters_dict = {key: value for key, value in metafilters}
+        cleaned_query = re.sub(metafilter_pattern, "", query).strip()
+        cleaned_query = re.sub(r"\s+", " ", cleaned_query)
+        return metafilters_dict, cleaned_query
 
-    else:
-        return input_query, ms2_df
+
+    def filter_ms2_df(ms2_df, metafilters):
+        for key, value in metafilters.items():
+            if key in ms2_df.columns:
+                ms2_df = ms2_df[ms2_df[key].astype(str) == value]
+        return ms2_df
+
+    metafilters, cleaned_query = extract_metafilters(input_query)
+    filtered_ms2_df = filter_ms2_df(ms2_df, metafilters)    
+
+    return cleaned_query, filtered_ms2_df
+
+
+
 
 def _determine_mz_max(mz, ppm_tol, da_tol):
     da_tol = da_tol if da_tol < 10000 else 0
@@ -654,7 +668,7 @@ def _executecollate_query(parsed_dict, ms1_df, ms2_df):
                 if len(ms2_df) == 0:
                     return pd.DataFrame()
 
-                kept_columns = ["motifset", "motif_id", "short_annotation", "annotation", "ms1scan", "charge", "scan"] #### Here I changed something
+                kept_columns = ["motifset", "motif_id", "short_annotation", "annotation", "Auto_annotation", "ms1scan", "charge", "scan", "ms2accuracy", "Analysis_MassSpectrometer", "Collision_Energy", "Scientific_Name", "Other_Information", "Sample_Type", "Massive_ID", "Taxon_ID", "Analysis_IonizationSource", "Analysis_ChromatographyAndPhase", "Analysis_Polarity", "Paper_URL", "Property"] #### Here I changed something
                 groupby_columns = ["scan"]
 
                 if "comment" in ms2_df:
