@@ -668,7 +668,7 @@ def _executecollate_query(parsed_dict, ms1_df, ms2_df):
                 if len(ms2_df) == 0:
                     return pd.DataFrame()
 
-                kept_columns = ["motifset", "motif_id", "short_annotation", "annotation", "Auto_annotation", "ms1scan", "charge", "scan", "ms2accuracy", "Analysis_MassSpectrometer", "Collision_Energy", "Scientific_Name", "Other_Information", "Sample_Type", "Massive_ID", "Taxon_ID", "Analysis_IonizationSource", "Analysis_ChromatographyAndPhase", "Analysis_Polarity", "Paper_URL", "Property"] #### Here I changed something
+                kept_columns = ["motifset", "motif_id", "short_annotation", "annotation", "auto_annotation", "ms1scan", "charge", "scan", "ms2accuracy", "analysis_massspectrometer", "collision_energy", "scientific_name", "other_information", "sample_type", "massive_id", "taxon_id", "analysis_ionizationsource", "analysis_chromatographyandphase", "analysis_polarity", "paper_url", "property"] #### Here I changed something
                 groupby_columns = ["scan"]
 
                 if "comment" in ms2_df:
