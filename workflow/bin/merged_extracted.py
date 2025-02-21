@@ -5,7 +5,7 @@ import json
 import uuid
 import pandas as pd
 
-from massql import msql_extract
+from massql4motifs import msql_extract
 
 
 def _export_extraction(all_spectra, output_mzML_filename, output_mgf_filename, output_json_filename):

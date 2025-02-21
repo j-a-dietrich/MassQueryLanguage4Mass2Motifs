@@ -1,1 +1,1 @@
-include massql/msql.ebnf
+include massql4motifs/msql.ebnf

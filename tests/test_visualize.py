@@ -4,7 +4,7 @@ import os
 # Making sure the root is in the path, kind of a hack
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from massql import msql_visualizer
+from massql4motifs import msql_visualizer
 
 import json
 import pytest

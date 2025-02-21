@@ -4,3 +4,4 @@ workflow/work
 tests/data
 tests/test_data/*.feather
 tests/test_parses
+.ipynb_checkpoints/

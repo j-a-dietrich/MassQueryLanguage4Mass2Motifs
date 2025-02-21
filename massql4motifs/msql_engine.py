@@ -8,10 +8,10 @@ import re # Change here
 
 from py_expression_eval import Parser
 
-from massql import msql_parser
-from massql import msql_fileloading
-from massql import msql_engine_filters
-from massql.msql_engine_filters import _get_mz_tolerance, _get_minintensity
+from massql4motifs import msql_parser
+from massql4motifs import msql_fileloading
+from massql4motifs import msql_engine_filters
+from massql4motifs.msql_engine_filters import _get_mz_tolerance, _get_minintensity
 
 math_parser = Parser()
 console = logging.StreamHandler()

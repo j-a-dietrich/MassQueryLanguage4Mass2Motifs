@@ -23,16 +23,16 @@ setuptools.setup(
         "Bug Tracker": "https://github.com/mwang87/MassQueryLanguage/issues",
         "Documentation": "https://mwang87.github.io/MassQueryLanguage_Documentation/"
     },
-    scripts=['massql/msql_cmd.py'],
+    scripts=['massql4motifs/msql_cmd.py'],
     entry_points = {
-        'console_scripts': ['massql=massql.msql_cmd:main'],
+        'console_scripts': ['massql=massql4motifs.msql_cmd:main'],
     },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    packages=["massql"],
+    packages=["massql4motifs"],
     install_requires=[
         "pymzml",
         "lark-parser",

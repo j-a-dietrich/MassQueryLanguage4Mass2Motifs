@@ -11,9 +11,9 @@ import pandas as pd
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
-from massql import msql_parser
-from massql import msql_engine
-from massql import msql_extract
+from massql4motifs import msql_parser
+from massql4motifs import msql_engine
+from massql4motifs import msql_extract
 
 def main():
     parser = argparse.ArgumentParser(description="MSQL CMD")

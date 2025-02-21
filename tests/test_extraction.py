@@ -4,8 +4,8 @@ import os
 # Making sure the root is in the path, kind of a hack
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from massql import msql_extract
-from massql import msql_engine
+from massql4motifs import msql_extract
+from massql4motifs import msql_engine
 
 import json
 import pytest
