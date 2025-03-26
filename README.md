@@ -21,7 +21,7 @@ cd MassQueryLanguage4Mass2Motifs
 pip install .
 ```
 
-It will say that massql4motifs is installed, but you have to import *massql* and not *massq4motifs*.
+It will say that massql4motifs is installed and you have to import *massq4motifs*.
 
 ## Usage
 This package should only be used with MotifDB. MotifDB can either be downloaded (not yet) from Zenodo or created with MS2LDA.
